@@ -1,6 +1,8 @@
 package com.example.demo.service;
 
 import com.example.demo.model.User;
+import com.example.demo.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -14,6 +16,9 @@ import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
 @Service                                    //ütleb applicatsioonile, et on service classiga tegemist
 
 public class UserService {
+
+    @Autowired
+    private UserRepository userRepository;
 
     private List<User> users = new ArrayList<>(List.of(             //See on MUUTUJA-private -et oleks kasutatav ainult klassi sees
             new User(1L, "Alice", "alice@example.com"),
@@ -38,21 +43,21 @@ public class UserService {
     }
 
     public String addUser(User user){
-
-        users.add(user);
+        userRepository.save(user);
+        /*users.add(user);*/            //see oli ennemalt, kui meil polnud andmebaasi järel
         return "User " + user.getName()+" has been added.";
     }
 
-    public String updateUserDetails(Long id, User user) {
+    public String updateUserDetails(Long id, User incomingUserData) {
         for (User u : users) {
-            if (user.getId().equals(id)) {
-                u.setEmail(u.getEmail());
-
-                return users.toString();
+            if (u.getId().equals(id)) {
+                u.setEmail(incomingUserData.getEmail());
+                u.setName(incomingUserData.getName());
+                System.out.println(" E-mail updated with: " + u.getEmail());
+                return "Updated user with ID: " + id + ", email and name has been updated!" + "\n " + users.toString();
+            }
         }
-        }
-
-        return "";
+        return "User with ID" + id + " is not in the list, cant change email!" + users.toString();
     }
 
     public User getUser() {

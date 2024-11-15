@@ -40,9 +40,10 @@ public class UserController {
     }
 
     @PutMapping("/update-user-details/{id}")
-    public String updateUserDetails(@PathVariable("id") Long id, @RequestBody User updatedUser){
-        return UserService.updateUserDetails(Long id,User user);
+    public String updateUserDetails(@PathVariable("id") Long id, @RequestBody User IncomingUserData){
+        return userService.updateUserDetails(id, IncomingUserData);
     }
+
 
     @GetMapping("/user")
     public User getUser() {

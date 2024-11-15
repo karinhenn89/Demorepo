@@ -1,14 +1,15 @@
 package com.example.demo.model;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import jakarta.persistence.*;
+import lombok.*;
 
 
-@Data
+@NoArgsConstructor              //klassi annotatsioonid
 @AllArgsConstructor
+@Getter
+@Setter
+@Entity
+@Table(name = "users")
 
 public class User {
 
