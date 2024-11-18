@@ -23,10 +23,9 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping("/print-users")
-    public List<User>printUsers(){
-
-        return userService.printUsers();
+    @GetMapping("/get-all-users")
+    public List<User>getAllUsers(){
+        return userService.getAllUsers();
     }
 
     @DeleteMapping("/remove-user-by-id/{id}")
@@ -45,20 +44,20 @@ public class UserController {
     }
 
 
-    @GetMapping("/user")
+ /*   @GetMapping("/user")
     public User getUser() {
         return userService.getUser();
-    }
+    }*/
 
     @GetMapping("/hello")
     public String hello() {
         return userService.hello();
     }
 
-    @GetMapping("/multiple-users")
+   /* @GetMapping("/multiple-users")
     public List<User> multipleUsers() {          //loome list kasutajatest
         return userService.multipleUsers();
-    }
+    }*/
 
     @GetMapping("/fruits")
     public Map<Integer, String> getFruits() {
@@ -82,10 +81,10 @@ public class UserController {
         return userService.squareNumber(numbeer);
     }
 
-    @GetMapping("oneuser/{id}")
+   /* @GetMapping("oneuser/{id}")
     public User userIdOneUser(@PathVariable("id") Long id) {          //loome list kasutajatest
         return userService.userIdOneUser(id);
-    }
+    }*/
      @GetMapping("userorder/{userID}/order/{orderId}")
     public String getUserbyId(@PathVariable("userID") int id,
                               @PathVariable("orderId") int orderId) {

@@ -18,57 +18,70 @@ import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
 public class UserService {
 
     @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;    //instantsi muutuja andmebaasile. Meil on userRepositroy klass
 
-    private List<User> users = new ArrayList<>(List.of(             //See on MUUTUJA-private -et oleks kasutatav ainult klassi sees
+    //constructor injection
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
+/*    private List<User> users = new ArrayList<>(List.of(             //See on MUUTUJA-private -et oleks kasutatav ainult klassi sees
             new User(1L, "Alice", "alice@example.com"),
             new User(2L, "Bob", "bob@example.com"),
-            new User(3L, "Charlie", "charlie@example.com")));
+            new User(3L, "Charlie", "charlie@example.com")));*/
 
 
-    public List<User> printUsers() {
-        return users;
+    public List<User> getAllUsers() {           //Tagame listi kasutajatest, tavelist
+
+        return userRepository.findAll();
+    }
+
+    public int getUsersCount() {
+
+        return getAllUsers().size();
     }
 
     public String removeUserById(Long id) {
         /*System.out.println("users before: " + users);*/
-        for (User u : users) {
-            if ((u.getId().equals(id))) {
-                users.remove(u);
-                return "User with ID " + id + " has been deleted." + users.toString();
+        for (User user : getAllUsers()) {
+            if ((user.getId().equals(id))) {
+                userRepository.delete(user);
+                return "User with ID " + id + " has been deleted.";
             }
         }
-        System.out.println("after for: " + users);
-        return "User ID: " + id + " is not found!" + users.toString();
+        return "User ID: " + id + " is not found!";
     }
 
     public String addUser(User user){
         userRepository.save(user);
         /*users.add(user);*/            //see oli ennemalt, kui meil polnud andmebaasi järel
-        return "User " + user.getName()+" has been added.";
+        return "User " + user.getFirstName()+" has been added.";
     }
 
     public String updateUserDetails(Long id, User incomingUserData) {
-        for (User u : users) {
-            if (u.getId().equals(id)) {
-                u.setEmail(incomingUserData.getEmail());
-                u.setName(incomingUserData.getName());
-                System.out.println(" E-mail updated with: " + u.getEmail());
-                return "Updated user with ID: " + id + ", email and name has been updated!" + "\n " + users.toString();
+        for (User user : getAllUsers()) {
+            if (user.getId().equals(id)) {
+                user.setFirstName(incomingUserData.getFirstName());
+                user.setLastName(incomingUserData.getLastName());
+                user.setEmail(incomingUserData.getEmail());
+                userRepository.save(user);          //see teeb muudatuse andmebaasis
+                System.out.println(" E-mail updated with: " + user.getEmail());
+                return "Updated user with ID: " + id + ", email and name has been updated!";
             }
         }
-        return "User with ID" + id + " is not in the list, cant change email!" + users.toString();
+        return "User with ID" + id + " is not in the list, cant change email!";
     }
 
-    public User getUser() {
+ /*   public User getUser() {
         return new User(1L, "John Doe", "john.doe@example.com");
-    }
+    }*/
 
     public String hello() {
+
         return "Hello World";
     }
 
-    public List<User> multipleUsers() {          //loome list kasutajatest
+/*    public List<User> multipleUsers() {          //loome list kasutajatest
         User user1 = new User(1L, "First User", "first.user@example.com");      //loome kolm uut objekti - kasutajat
         User user2 = new User(2L, "Second User", "second.user@example.com");
         User user3 = new User(3L, "Third User", "third.user@example.com");
@@ -78,7 +91,7 @@ public class UserService {
         userList.add(user3);
 
         return userList;
-    }
+    }*/
 
     public Map<Integer, String> getFruits() {
         Map<Integer, String> fruits = new HashMap<>();
@@ -90,6 +103,7 @@ public class UserService {
     }
 
     public String getUserID(int userId) {
+
         return "User ID: " + userId;
     }
 
@@ -120,7 +134,7 @@ public class UserService {
     //Create a @GetMapping method that retrieves a user by their id. Use @PathVariable to get the id from the URL.
     //Inside the method, use a for loop to search through the list of users and return the user whose id matches the id in the URL. If no match is found,
     // return null.
-    public User userIdOneUser(Long id) {          //loome list kasutajatest
+ /*   public User userIdOneUser(Long id) {          //loome list kasutajatest
 
         User user1 = new User(1L, "Bloody Mary", "first.user@example.com");      //loome kolm uut objekti - kasutajat
         User user2 = new User(2L, "Martiini Class", "second.user@example.com");
@@ -137,7 +151,7 @@ public class UserService {
             }
         }
         return null;
-    }
+    }*/
 
     // Create a @GetMapping method that retrieves a user by their id and order id. Use @PathVariable to get the id and order id from the URL.
     public String getUserbyId(int id,
